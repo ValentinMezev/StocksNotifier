@@ -1,0 +1,17 @@
+# the companies for which to show report and notify when stocks change
+# the maximum number can be 100 and they are validated to be valid companies
+companies:
+  - MSFT
+  - FB
+# change bigger than this number of percent will trigger notification
+# allowed values are integers between 1 and 1000
+percent-change: 5
+# whether to run the script in background. In background it only checks for stock
+# changes bigger than 'percent-change'. Allowed values are true and false
+run-in-background: false
+# if run-in-background is true this specifies at what interval to check for changes
+# in stocks. It represents hours and possible values are between 1 and 168 (1 week)
+executed-every-hours: 1
+# when not running in background the program displays reports for companies for the last
+# X days where X is specified by this prop. It is integer between 1 and 365
+report-for-days: 7
