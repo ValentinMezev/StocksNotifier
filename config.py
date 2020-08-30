@@ -36,10 +36,10 @@ class Config:
             raise ValueError("Max length of companies is 100")
 
     def validate_executed_every_hours(self):
-        scheduled_in_hours = self.config["executed-every-hours"]
-        if not isinstance(scheduled_in_hours, int):
+        execute_every_hours = self.config["executed-every-hours"]
+        if not isinstance(execute_every_hours, int):
             raise ValueError("Executed every hours config prop is not int")
-        if int(scheduled_in_hours) <= 0 or int(scheduled_in_hours) > 168:
+        if int(execute_every_hours) <= 0 or int(execute_every_hours) > 168:
             raise ValueError("Executed every hours should be positive number between 1 and 168")
 
     def validate_report_for_days(self):

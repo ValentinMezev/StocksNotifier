@@ -1,10 +1,11 @@
-from pandas_datareader import data as pdr
 import datetime
 import os
-from tabulate import tabulate
-import sched, time
+import sched
+import time
 
 import yfinance as yf
+from pandas_datareader import data as pdr
+from tabulate import tabulate
 
 from config import Config
 
@@ -76,7 +77,7 @@ def run(sc, **kwargs):
             result.append([currentDate, current, comparedToLast, comparedToPrevious])
             previous = current
 
-            if highLast > current and get_change(highLast, current) > float(config.percent_change()):
+            if highLast < current and get_change(highLast, current) > float(config.percent_change()):
                 companies_with_desired_change.add(company)
 
         comparedToPrevious = calculate_percentage_change(highLast, previous)
@@ -89,14 +90,13 @@ def run(sc, **kwargs):
         notify("Stocks change", companies_to_notify_for(companies_with_desired_change))
 
     if s:
-        # s.enter(config.executed_every_hours() * 3600, 1, run, (sc,))
-        s.enter(3, 1, run, (sc,), {"config": config})
+        s.enter(config.executed_every_hours(), 1, run, (sc,), {"config": config})
 
 
 def companies_to_notify_for(companies):
     limit = 10  # limit of companies to show in the notification
     if len(companies) > limit:
-        companies = companies[:10]
+        companies = companies[:limit]
         companies.append("... and more")
 
     return companies

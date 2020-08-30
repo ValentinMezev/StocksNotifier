@@ -3,6 +3,9 @@
 companies:
   - MSFT
   - FB
+  - AAPL
+  - GOOGL
+  - AMZN
 # change bigger than this number of percent will trigger notification
 # allowed values are integers between 1 and 1000
 percent-change: 5
