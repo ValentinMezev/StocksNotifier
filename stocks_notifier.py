@@ -2,6 +2,7 @@ from pandas_datareader import data as pdr
 import datetime
 import os
 from tabulate import tabulate
+import sched, time
 
 import yfinance as yf
 
@@ -40,13 +41,14 @@ def print_company_name(company):
 
 def validate_companies_validity(companies, start, end):
     for company in companies:
-        data = pdr.get_data_yahoo(company, start=start, end=end)
+        data = pdr.get_data_yahoo(company, start=start, end=end, progress=False)
         if data is None or len(data) == 0:
             raise ValueError("Company " + str(company) + " is not valid")
 
 
-def run():
-    config = Config()
+def run(sc, **kwargs):
+    config = kwargs["config"]
+    logger_enabled = kwargs.get("logger_enabled")
     companies = config.companies()
 
     yf.pdr_override()
@@ -57,8 +59,9 @@ def run():
 
     companies_with_desired_change = set()
     for company in companies:
-        print_company_name(company)
-        data = pdr.get_data_yahoo(company, start=start, end=end)
+        if logger_enabled:
+            print_company_name(company)
+        data = pdr.get_data_yahoo(company, start=start, end=end, progress=False)
         indexLast = len(data.High.values) - 1
         dateLast = data.High.axes[0].date[indexLast]
         highLast = data.High.values[indexLast]
@@ -78,16 +81,21 @@ def run():
 
         comparedToPrevious = calculate_percentage_change(highLast, previous)
         result.append([dateLast, highLast, "N/A", comparedToPrevious])
-        print(tabulate(result,
-                       headers=['Date', 'High', 'Compared to last', "Compared to previous"]))
+        if logger_enabled:
+            print(tabulate(result,
+                           headers=['Date', 'High', 'Compared to last', "Compared to previous"]))
 
     if len(companies_with_desired_change) > 0:
         notify("Stocks change", companies_to_notify_for(companies_with_desired_change))
 
+    if s:
+        # s.enter(config.executed_every_hours() * 3600, 1, run, (sc,))
+        s.enter(3, 1, run, (sc,), {"config": config})
+
 
 def companies_to_notify_for(companies):
     limit = 10  # limit of companies to show in the notification
-    if len (companies) > limit:
+    if len(companies) > limit:
         companies = companies[:10]
         companies.append("... and more")
 
@@ -100,5 +108,11 @@ def notify(title, text):
               """.format(text, title))
 
 
-if __name__ == '__main__':
-    run()
+config = Config()
+s = None
+if config.run_in_background():
+    s = sched.scheduler(time.time, time.sleep)
+    s.enter(1, 1, run, (s,), {"config": config})
+    s.run()
+else:
+    run(None, config=config, logger_enabled=True)

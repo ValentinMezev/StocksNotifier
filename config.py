@@ -1,11 +1,13 @@
 import yaml
+import os
 
 CONFIG_FILE = "config/config.yaml"
 
 
 class Config:
     def __init__(self):
-        with open(CONFIG_FILE, 'r') as f:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(dir_path, CONFIG_FILE), 'r') as f:
             self.config = yaml.safe_load(f)
             self.validate()
 
