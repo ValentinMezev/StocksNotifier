@@ -1,11 +1,13 @@
 # Stocks Notifier
 ## Description
-Shows stock prices for desired companies for a period along with price change in percentages.
+Shows stock prices for desired companies for a period along with price change in percentages. \
 The program may run in background to show notifications when a price drops bellow desired 
-percentage (for this it takes into account only the highest price of the stock for the particular day).
+percentage. (for this it takes into account only the highest price of the stock for the particular day).
 
 ## Usage
-The program has two run modes
+It is important to say that when comparing the stocks in order to decide whether to show notification the program takes into account 
+only the highest price of the stock for the particular day. \
+The program has two run modes:
 1. Run foreground:
     - display stock price for particular companies for the last X (configurable) days along with percent change for the day 
     compared to the previous day and compared to the last day
@@ -52,4 +54,4 @@ The background process can be stopped using the `stop.sh` script
 This way if one have scheduled the job to run often and they already get notified 2-3 times this day it might be 
 unnecessary to get notified more until the rest of the day
 
-- adding tests s
+- adding tests
