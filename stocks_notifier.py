@@ -27,20 +27,7 @@ def calculate_percentage_change(prev, current):
     return sign + str(get_change(prev, current)) + "%"
 
 
-def del_for_company(num):
-    res = ""
-    for i in range(0, num):
-        res += "-"
-    return res
-
-
-def print_company_name(company):
-    print("------------------------------------------------------" + del_for_company(len(company)))
-    print("---------------------------" + company + "---------------------------")
-    print("------------------------------------------------------" + del_for_company(len(company)))
-
-
-def validate_companies_validity(companies, start, end):
+def check_companies_validity(companies, start, end):
     for company in companies:
         data = pdr.get_data_yahoo(company, start=start, end=end, progress=False)
         if data is None or len(data) == 0:
@@ -56,7 +43,7 @@ def run(sc, **kwargs):
 
     end = datetime.date.today()
     start = end - datetime.timedelta(days=config.report_for_days())
-    validate_companies_validity(companies, start, end)
+    check_companies_validity(companies, start, end)
 
     companies_with_desired_change = set()
     for company in companies:
@@ -91,6 +78,19 @@ def run(sc, **kwargs):
 
     if s:
         s.enter(config.executed_every_hours(), 1, run, (sc,), {"config": config})
+
+
+def del_for_company(num):
+    res = ""
+    for i in range(0, num):
+        res += "-"
+    return res
+
+
+def print_company_name(company):
+    print("------------------------------------------------------" + del_for_company(len(company)))
+    print("---------------------------" + company + "---------------------------")
+    print("------------------------------------------------------" + del_for_company(len(company)))
 
 
 def companies_to_notify_for(companies):
