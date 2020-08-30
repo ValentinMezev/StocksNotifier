@@ -1,0 +1,1 @@
+pkill -f stocks_notifier.py
