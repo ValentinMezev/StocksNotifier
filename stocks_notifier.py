@@ -74,10 +74,17 @@ def run(sc, **kwargs):
                            headers=['Date', 'High', 'Compared to last', "Compared to previous"]))
 
     if len(companies_with_desired_change) > 0:
-        notify("Stocks change", companies_to_notify_for(companies_with_desired_change))
+        notify_companies = companies_to_notify_for(companies_with_desired_change)
+        notify("Stocks change", notify_companies)
+        write_notification(notify_companies)
 
     if s:
         s.enter(config.executed_every_hours(), 1, run, (sc,), {"config": config})
+
+
+def write_notification(notify_companies):
+    with open("notifications.out", 'w') as f:
+        f.write(str(notify_companies))
 
 
 def del_for_company(num):
@@ -99,7 +106,9 @@ def companies_to_notify_for(companies):
         companies = companies[:limit]
         companies.append("... and more")
 
-    return companies
+    if len(companies) > 0:
+        return ', '.join(str(e) for e in companies)
+    return ""
 
 
 def notify(title, text):

@@ -38,7 +38,7 @@ The following are configurable inside config/config.yaml:
 
 ## Installation
 After syncing the repository one must install the required packages. \
-As a prerequisite python and pip (package manager for python packages) installed are required \
+As a prerequisite python 3 and pip (package manager for python packages) installed are required \
 Then install this program packages with: \
 `pip install -r requirements.txt`
 
