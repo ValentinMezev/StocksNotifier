@@ -47,7 +47,8 @@ Use the `start.sh` script located in the scripts folder. \
 You may start it using `cd scripts && ./start.sh` \
 If background running is disabled from the configuration this will execute once and stop \
 Otherwise a background process will be started that will execute as often as configured in the configuration file \
-The background process can be stopped using the `stop.sh` script
+The background process can be stopped using the `stop.sh` script \
+One can query the running in background process via `ps ax | grep stocks_notifier`
 
 ## Future improvements
 - in future a mechanism to show N (configurable) number of times the notification per day should be added. 

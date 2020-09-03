@@ -79,7 +79,7 @@ def run(sc, **kwargs):
         write_notification(notify_companies)
 
     if s:
-        s.enter(config.executed_every_hours(), 1, run, (sc,), {"config": config})
+        s.enter(config.executed_every_hours() * 3600, 1, run, (sc,), {"config": config})
 
 
 def write_notification(notify_companies):
