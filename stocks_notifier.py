@@ -2,6 +2,7 @@ import datetime
 import os
 import sched
 import time
+import itertools
 
 import yfinance as yf
 from pandas_datareader import data as pdr
@@ -102,12 +103,16 @@ def print_company_name(company):
 
 def companies_to_notify_for(companies):
     limit = 10  # limit of companies to show in the notification
+    result = list()
     if len(companies) > limit:
-        companies = companies[:limit]
-        companies.append("... and more")
+        for i, val in enumerate(itertools.islice(companies, limit)):
+            result.append(val)
+        result.append("... and more")
+    else:
+        result = companies
 
-    if len(companies) > 0:
-        return ', '.join(str(e) for e in companies)
+    if len(result) > 0:
+        return ', '.join(str(e) for e in result)
     return ""
 
 
